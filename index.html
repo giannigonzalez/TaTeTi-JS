@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>TaTeTi</title>
+
+        <style>
+            body{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: Arial, Helvetica, sans-serif;
+                height: 100vh;
+                margin: 0;
+                background-color: #6A6767;
+            }
+            #container {
+                background-color: #979494;
+                display: grid;
+                grid-template: repeat(3, 100px) / repeat(3, 100px);
+            }
+            span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid black;
+                cursor: pointer;
+            }
+            span:hover {
+                color:white;
+                border-color: #DDDDDD;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div id="container"></div>
+        <script>
+
+            const game = [
+                ['', '', ''],
+                ['', '', ''],
+                ['', '', ''],
+            ]
+
+            let currentUser = 'O'
+
+            function checkStatus(user){
+
+                if(game[0][0] === user && game[0][1] === user && game[0][2] === user){
+                    return true
+                }
+                if(game[1][0] === user && game[1][1] === user && game[1][2] === user){
+                    return true
+                }
+                if(game[2][0] === user && game[2][1] === user && game[2][2] === user){
+                    return true
+                }
+                if(game[0][0] === user && game[1][0] === user && game[2][0] === user){
+                    return true
+                }
+                if(game[0][1] === user && game[1][2] === user && game[2][3] === user){
+                    return true
+                }
+                if(game[0][1] === user && game[1][1] === user && game[2][1] === user){
+                    return true
+                }
+                if(game[0][2] === user && game[1][2] === user && game[2][2] === user){
+                    return true
+                }
+                if(game[2][0] === user && game[1][1] === user && game[0][2] === user){
+                    return true
+                }
+                if(game[0][0] === user && game[1][1] === user && game[2][2] === user){
+                    return true
+                }
+                return false
+
+            }
+
+            function setWinner(user){
+                alert(`Ha ganado el usuario ${user}`)
+            }
+
+            function selectItem(){
+                game[this.dataset.row][this.dataset.column] = currentUser
+                setBoard()
+
+                if(checkStatus(currentUser)){
+                    setWinner(currentUser)
+                }
+                
+                if(currentUser === 'O'){
+                    currentUser = 'X'
+                } else {
+                    currentUser = 'O'
+                }
+                
+            }
+
+            function render({content, row, column}, container){
+                const el = document.createElement('span')
+                el.textContent = `${content}`
+                el.dataset.row = row
+                el.dataset.column = column
+                el.addEventListener('click', selectItem)
+                container.append(el)
+            }
+            
+            function setBoard(){
+                container.innerHTML = ''
+                game.forEach((row, indexRow) => {
+                    row.forEach((column, indexColumn) => {
+                        render({
+                            content: column,
+                            row: indexRow,
+                            column: indexColumn,
+                            }, window.container)
+                    })
+                })
+            }
+
+            setBoard()
+
+        </script>
+
+    </body>
+
+</html>
